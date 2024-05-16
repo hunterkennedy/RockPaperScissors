@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://dshl1uahdbg1j"]
+
+[ext_resource type="Script" path="res://scenes/Main.gd" id="1_vefi2"]
+[ext_resource type="AudioStream" uid="uid://bxsffciwrsuju" path="res://art/sounds/music.mp3" id="3_ym1d0"]
+[ext_resource type="PackedScene" uid="uid://bs6vms1svxeng" path="res://scenes/hud.tscn" id="4_54asn"]
+[ext_resource type="PackedScene" uid="uid://bx5sqewgaddid" path="res://scenes/HealthHand.tscn" id="4_lre0u"]
+[ext_resource type="PackedScene" uid="uid://bgkktmc13rbjp" path="res://scenes/PlayHand.tscn" id="5_0eicb"]
+[ext_resource type="PackedScene" uid="uid://bs8wcnvhai3kb" path="res://scenes/MoveSelector.tscn" id="5_gg066"]
+[ext_resource type="AudioStream" uid="uid://cob70pakb3q3g" path="res://art/sounds/lose.mp3" id="7_e10hi"]
+[ext_resource type="AudioStream" uid="uid://beav4ned06f21" path="res://art/sounds/win.mp3" id="8_s48pn"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_vefi2")
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="HUD" parent="." instance=ExtResource("4_54asn")]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+offset_right = 720.0
+offset_bottom = 480.0
+
+[node name="HealthHand" parent="." instance=ExtResource("4_lre0u")]
+position = Vector2(160, 368)
+
+[node name="MoveSelector" parent="." instance=ExtResource("5_gg066")]
+position = Vector2(488, 312)
+
+[node name="PlayHand" parent="." instance=ExtResource("5_0eicb")]
+position = Vector2(512, 384)
+
+[node name="EnemyHand" parent="." instance=ExtResource("5_0eicb")]
+position = Vector2(512, 192)
+scale = Vector2(-1, 1)
+
+[node name="EnemyHealthHand" parent="." instance=ExtResource("4_lre0u")]
+position = Vector2(160, 128)
+scale = Vector2(1, -1)
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ym1d0")
+
+[node name="LoseSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_e10hi")
+
+[node name="WinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_s48pn")
+
+[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="_on_hud_start_game"]
+[connection signal="game_over" from="HealthHand" to="." method="_on_health_hand_game_over"]
+[connection signal="play_move" from="MoveSelector" to="." method="_on_move_selector_play_move"]
+[connection signal="on_shake_done" from="PlayHand" to="." method="_on_play_hand_on_shake_done"]
+[connection signal="show_outcome" from="PlayHand" to="." method="_on_play_hand_show_outcome"]
+[connection signal="game_over" from="EnemyHealthHand" to="." method="_on_enemy_health_hand_game_over"]

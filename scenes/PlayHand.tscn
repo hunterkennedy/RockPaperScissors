@@ -1,0 +1,94 @@
+[gd_scene load_steps=8 format=3 uid="uid://bgkktmc13rbjp"]
+
+[ext_resource type="Texture2D" uid="uid://bdlvpi4vbrele" path="res://art/moves/scissors.png" id="1_deqct"]
+[ext_resource type="Script" path="res://scenes/PlayHand.gd" id="1_xvu1y"]
+[ext_resource type="Texture2D" uid="uid://bcfrulk3ls6tx" path="res://art/moves/rock.png" id="2_otll1"]
+[ext_resource type="Texture2D" uid="uid://tb2f2qmohgb1" path="res://art/moves/paper.png" id="3_ddobk"]
+[ext_resource type="AudioStream" uid="uid://dal86a7a3okda" path="res://art/sounds/whoosh.mp3" id="5_44hlo"]
+
+[sub_resource type="Animation" id="Animation_rfmde"]
+resource_name = "shake"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlaySprite:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(0.5, 0.5, 0.5, 0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(0, -128), Vector2(0, 0), Vector2(0, -128), Vector2(0, 0), Vector2(0, -128), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlaySprite:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.5, 0.6, 1.8, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.5, 0.6, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"set_sprite_to_queued_move"
+}, {
+"args": [],
+"method": &"send_show_outcome"
+}, {
+"args": [],
+"method": &"indicate_shake_done"
+}]
+}
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AudioStreamPlayer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("5_44hlo")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/3/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u3u6m"]
+_data = {
+"shake": SubResource("Animation_rfmde")
+}
+
+[node name="PlayHand" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_xvu1y")
+rock_sprite = ExtResource("2_otll1")
+paper_sprite = ExtResource("3_ddobk")
+scissors_sprite = ExtResource("1_deqct")
+
+[node name="PlaySprite" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+texture = ExtResource("2_otll1")
+offset = Vector2(0, -128)
+
+[node name="ShakeAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_u3u6m")
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

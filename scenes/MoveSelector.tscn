@@ -1,0 +1,97 @@
+[gd_scene load_steps=8 format=3 uid="uid://bs8wcnvhai3kb"]
+
+[ext_resource type="Script" path="res://scenes/MoveSelector.gd" id="1_m5cty"]
+[ext_resource type="Texture2D" uid="uid://bdlvpi4vbrele" path="res://art/moves/scissors.png" id="1_ul2au"]
+[ext_resource type="Texture2D" uid="uid://bcfrulk3ls6tx" path="res://art/moves/rock.png" id="2_a4s8r"]
+[ext_resource type="Texture2D" uid="uid://tb2f2qmohgb1" path="res://art/moves/paper.png" id="3_j03pm"]
+
+[sub_resource type="Animation" id="Animation_bine4"]
+resource_name = "in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 0.25),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_v0xtb"]
+resource_name = "out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 0.25),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_fade_out_done"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gl4qg"]
+_data = {
+"in": SubResource("Animation_bine4"),
+"out": SubResource("Animation_v0xtb")
+}
+
+[node name="MoveSelector" type="Node2D"]
+modulate = Color(1, 1, 1, 0)
+texture_filter = 1
+script = ExtResource("1_m5cty")
+
+[node name="ScissorButton" type="Button" parent="."]
+offset_left = 72.0
+offset_top = 16.0
+offset_right = 208.0
+offset_bottom = 152.0
+tooltip_text = "Play Scissors"
+icon = ExtResource("1_ul2au")
+icon_alignment = 1
+
+[node name="RockButton" type="Button" parent="."]
+offset_top = -136.0
+offset_right = 136.0
+tooltip_text = "Play Rock"
+icon = ExtResource("2_a4s8r")
+icon_alignment = 1
+
+[node name="PaperButton" type="Button" parent="."]
+offset_left = -80.0
+offset_top = 16.0
+offset_right = 56.0
+offset_bottom = 152.0
+tooltip_text = "Play Paper"
+icon = ExtResource("3_j03pm")
+icon_alignment = 1
+
+[node name="InOut" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_gl4qg")
+}
+
+[connection signal="pressed" from="ScissorButton" to="." method="_on_scissor_button_pressed"]
+[connection signal="pressed" from="RockButton" to="." method="_on_rock_button_pressed"]
+[connection signal="pressed" from="PaperButton" to="." method="_on_paper_button_pressed"]
