@@ -1,0 +1,5 @@
+# Godot 4+ specific ignores
+.godot/
+
+# I do not have redistribution rights on the audio
+./art/sounds/
